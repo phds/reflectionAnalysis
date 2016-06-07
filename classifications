@@ -1,0 +1,51 @@
+a ideia é dar pontuação para as frases encontradas e multiplica-las eventualmente
+
+formula: para cada [verbos]: (não)*(adverbios + adjetivo)
+
+esses verbos tem que ser verbos que indicam opinião ou impressão sobre algo
+
+pegar cada verbo + as 5 palavras ao redor?
+talvez seja necessario analisar verbo a verbo pra saber qual consegue ter adjetivos depois ou somente antes
+verbos transitivos
+
+verbos que iniciam classificações
+esses verbos sao transitivos - precisam de complemento
+
+achei  1
+tive   1
+acho  1
+foi, é, era  1
+estou/estar 1
+fazer/fazendo 1
+encontramos/encontrei
+
+advérbios
+
+muito  2
+pouco 1 (not sure)
+
+adjetivos classificadores de verbos
+
+difícil -1
+complicado -1
+bem 2
+
+complicadíssimo -2
+ou qualquer adjetivo com issimo -2
+
+substantivos
+
+
+dificuldade -1
+problemas -1
+
+
+
+
+
+
+O sistema terá duas funções: retornar as frases que possuem os indicativos de problemas, e outra que retorna um score indicativo para cada reflection.
+
+analyseReflection(reflection)
+
+na real pode ser uma funcao so que retorna tudo, um json com score e as frases
