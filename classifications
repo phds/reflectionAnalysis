@@ -18,30 +18,40 @@ foi, é, era  1
 estou/estar 1
 fazer/fazendo 1
 encontramos/encontrei
+sinto
+conseguir
 
 advérbios
 
 muito  2
-pouco 1 (not sure)
+pouco 0.5
+acho que 0.5
 
 adjetivos classificadores de verbos
 
 difícil -1
 complicado -1
 bem 2
-
+frustração
+um tanto quanto
 complicadíssimo -2
 ou qualquer adjetivo com issimo -2
+
+adjetivos
+
+confusos -2
+
+
 
 substantivos
 
 
 dificuldade -1
-problemas -1
+problema -1
 
 
 
-
+"não consigo fazer"
 
 
 O sistema terá duas funções: retornar as frases que possuem os indicativos de problemas, e outra que retorna um score indicativo para cada reflection.
@@ -49,3 +59,58 @@ O sistema terá duas funções: retornar as frases que possuem os indicativos de
 analyseReflection(reflection)
 
 na real pode ser uma funcao so que retorna tudo, um json com score e as frases
+
+
+testes:
+
+"Até aqui sinto certa frustração com meu desempenho pois sinto que estou me desgastando nas aulas. Imagino que a pressa em fazer os exercícios ou a quantidade deles tenha me deixado saturada, mas talvez me reacostumar a acordar cedo esteja sendo um fator determinante também"
+
+    verbo
+        sinto
+
+        substantivos:
+            frustração -3
+        advérbio:
+            -
+        adjetivos:
+            certa 0.7
+
+        resultado: -2.1
+
+    verbo
+        deixado
+
+        substantivos:
+
+        advérbio:
+            -
+        adjetivos:
+            saturada -2
+
+        resultado -2
+
+    frases:
+        "Até aqui sinto certa frustração com meu desempenho pois sinto que estou me desgastando nas aulas."
+        "Imagino que a pressa em fazer os exercícios ou a quantidade deles tenha me deixado saturada, mas talvez me reacostumar a acordar cedo esteja sendo um fator determinante também"
+
+    resultado final: -4.1
+
+
+"Definir nossa big idea nos fez entender sobre como o mercado hoje se divide entre serviços para não-cegos e cegos. A início, ficamos confusos sobre o quão priorizar questões de acessibilidade no aplicativo, e acho que foi difícil pensar projetar pensando primeiro no fator deficiência visual e só posteriormente em personas relacionadas aos gostos e personalidade do usuário. Especificar a big idea e as questions, pivotando alguns passos, foi essencial para a qualidade da solução. Gostaria de projetar, no futuro, tendo conhecimento sobre guidelines de acessibilidade apenas como um requisito básico do meu aplicativo. Deste modo, focar na inovação e não no serviço para a debilidade de alguém. Ainda sim, compreendo que para o CBL isso possa ter se tornado obrigatório, para incentivar o estudo da área."
+
+    verbo
+        foi
+
+        substantivos:
+            -
+        advérbios:
+            acho que 0.5
+        adjetivos:
+            difícil -1
+
+        resultado -0.5
+
+    frases:
+        A início, ficamos confusos sobre o quão priorizar questões de acessibilidade no aplicativo, e acho que foi difícil pensar projetar pensando primeiro no fator deficiência visual e só posteriormente em personas relacionadas aos gostos e personalidade do usuário.
+
+
