@@ -1,16 +1,18 @@
 import json
 from pprint import pprint
 import nltk
-from nltk.tokenize import sent_tokenize
+from nltk.tokenize.punkt import PunktSentenceTokenizer
 from unidecode import unidecode
 
-file = open('assets/reflections.json', encoding="utf8")
 
-# usar stopword pra tirar o desnecessario (lembrar de tirar o nâo do grupo)
 
-data = json.load(file)
-
-pprint(data)
+# file = open('assets/reflections.json', encoding="utf8")
+#
+# # usar stopword pra tirar o desnecessario (lembrar de tirar o nâo do grupo)
+#
+# data = json.load(file)
+#
+# pprint(data)
 
 # verbos
 
@@ -92,7 +94,11 @@ sample_reflection = "Até aqui sinto certa frustração com meu desempenho pois 
 
 
 def analyse_reflection(reflection):
-    reflection_sentences = nltk.word_tokenize(reflection)
+
+    sent_tokenizer = PunktSentenceTokenizer()
+    reflection_sentences = sent_tokenizer.tokenize(reflection)
+
+    word_tokenizer = nltk.tokenize.word_tokenize
 
     for sentence in reflection_sentences:
 
@@ -102,7 +108,14 @@ def analyse_reflection(reflection):
             for verb in verb_conjugations:
 
                 # verbos sao necessariamente uma palavra so, entao nao preciso quebrar em ngrams
-                tokenized_sentence = enumerate(sent_tokenize(sentence))
+                sent = word_tokenizer(sentence)
+                tokenized_sentence = enumerate(sent)
+
+
+
+                ####PAREI AQUI#####
+
+
 
                 # esse é para o caso de existir o mesmo verbo mais de uma vez na mesma frase
                 verb_indexes = [i for i, v in tokenized_sentence if v == verb]
@@ -128,12 +141,20 @@ def analyse_reflection(reflection):
                     checked_words_in_sentence += [index for index, word in surr_substantives]
 
                     adj_words = [clean_word(adj['word']) for adj in adjectives]
-                    surr_adjectives = [(index, word) for (index, word) in surr_words if word in adj_words and index not in checked_words_in_sentence]
+                    surr_adjectives = [(index, word) for (index, word) in surr_words if
+                                       word in adj_words and index not in checked_words_in_sentence]
                     checked_words_in_sentence += [index for index, word in surr_adjectives]
 
                     adv_words = [clean_word(adv['word']) for adv in adverbs]
-                    surr_adverbs = [(index, word) for (index, word) in surr_words if word in adv_words and index not in checked_words_in_sentence]
+                    surr_adverbs = [(index, word) for (index, word) in surr_words if
+                                    word in adv_words and index not in checked_words_in_sentence]
                     checked_words_in_sentence += [index for index, word in surr_adverbs]
+
+                    print('for the sentence: ' + sentence)
+                    print('for the verb ' + verb)
+                    print('substantives: ' + ' '.join([word for index, word in surr_substantives]))
+                    print('adjetives: ' + ' '.join([word for index, word in surr_adjectives]))
+                    print('adverbs: ' + ' '.join([word for index, word in adjectives]))
 
 
 def clean_word(word):
