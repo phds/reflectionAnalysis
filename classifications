@@ -114,3 +114,11 @@ testes:
         A início, ficamos confusos sobre o quão priorizar questões de acessibilidade no aplicativo, e acho que foi difícil pensar projetar pensando primeiro no fator deficiência visual e só posteriormente em personas relacionadas aos gostos e personalidade do usuário.
 
 
+
+
+desenvolver um metodo que analise os pronomes pessoais e veja as classificacoes dele:
+
+exemplo:
+ sinto que estou me desgastando
+
+o lance eh pegar o 'me' e procurar por verbos (ou adjetivos) que se ligam a ele

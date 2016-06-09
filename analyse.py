@@ -14,21 +14,17 @@ from unidecode import unidecode
 
 # verbos
 
-# verbs = (
-#     ('ter', 'tenho', 'tive'),
-#     ('achar', 'acho', 'achei'),
-#     ('ser', 'é', 'foi', 'era'),
-#     ('estar', 'estou', 'esteve', 'estava', 'estive'),
-#     ('encontrar', 'encontramos', 'encontro', 'encontrei', 'encontrávamos'),
-#     ('sentir', 'sinto', 'senti'),
-#     ('fazer', 'faço', 'fiz', 'fizemos')
-# )
-
-
 verbs = (
-     ('sinto', 'deixado'),
-     ('nada', 'hdiasu')
+    ('ter', 'tenho', 'tive'),
+    ('achar', 'acho', 'achei'),
+    ('ser', 'é', 'foi', 'era'),
+    ('estar', 'estou', 'esteve', 'estava', 'estive'),
+    ('encontrar', 'encontramos', 'encontro', 'encontrei', 'encontrávamos'),
+    ('sentir', 'sinto', 'senti'),
+    ('fazer', 'faço', 'fiz', 'fizemos'),
+    ('deixar', 'deixo', 'deixado', 'deixamos')
 )
+
 
 adverbs = (
     {
@@ -120,20 +116,20 @@ def analyse_reflection(reflection):
 
                 # verbos sao necessariamente uma palavra so, entao nao preciso quebrar em ngrams
                 sent = word_tokenizer(sentence)
+
+                # changing the enumerable object to list
                 tokenized_sentence = [x for x in enumerate(sent)]
 
                 # esse é para o caso de existir o mesmo verbo mais de uma vez na mesma frase
                 verb_indexes = [(i, v) for i, v in tokenized_sentence if v == verb]
 
                 if not verb_indexes:
-                    break
+                    continue
 
                 for verb_index, verb in verb_indexes:
                     # offset para pesquisar por outros elementos ao redor dos verbos
                     offset = 3
 
-                    # changing the enumerable object to list
-                    tokenized_sentence = [x for x in tokenized_sentence]
 
                     # surr stands for surrounding
                     surr_words = [(index, word) for index, word in tokenized_sentence[max(0, verb_index - offset):verb_index + offset]]
@@ -145,30 +141,34 @@ def analyse_reflection(reflection):
 
                     # substantives are not cleaned
                     subs_words = [sub['word'] for sub in substantives]
-                    surr_substantives = [(index, word) for (index, word) in surr_words if word in subs_words]
+                    surr_substantives = [(index, word) for (index, word) in surr_words if word.lower() in subs_words]
                     checked_words_in_sentence += [index for index, word in surr_substantives]
 
                     adj_words = [clean_word(adj['word']) for adj in adjectives]
                     surr_adjectives = [(index, word) for (index, word) in cleaned_surr_words if
                                        word in adj_words and index not in checked_words_in_sentence]
                     checked_words_in_sentence += [index for index, word in surr_adjectives]
+                    for adj in surr_adjectives:
+                        adj = adj + ()
+
 
                     adv_words = [clean_word(adv['word']) for adv in adverbs]
                     surr_adverbs = [(index, word) for (index, word) in cleaned_surr_words if
                                     word in adv_words and index not in checked_words_in_sentence]
                     checked_words_in_sentence += [index for index, word in surr_adverbs]
 
-                    print('for the sentence: ' + sentence)
-                    print('for the verb ' + verb)
-                    print('substantives: ' + ' '.join([word for index, word in surr_substantives]))
-                    print('adjetives: ' + ' '.join([word for index, word in surr_adjectives]))
-                    print('adverbs: ' + ' '.join([word for index, word in surr_adverbs]) + '\n\n\n')
+                    if surr_substantives or surr_adjectives or surr_adverbs:
+                        print('for the sentence: ' + sentence)
+                        print('for the verb ' + verb)
+                        print('substantives: ' + ' '.join([word for index, word in surr_substantives]))
+                        print('adjetives: ' + ' '.join([word for index, word in surr_adjectives]))
+                        print('adverbs: ' + ' '.join([word for index, word in surr_adverbs]) + '\n\n\n')
 
 
 def clean_word(word):
     stemmer = nltk.stem.RSLPStemmer()
 
-    return stemmer.stem(unidecode(word))
+    return stemmer.stem(unidecode(word)).lower()
 
 
 analyse_reflection(sample_reflection)
