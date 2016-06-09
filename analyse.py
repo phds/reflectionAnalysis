@@ -4,8 +4,6 @@ import nltk
 from nltk.tokenize.punkt import PunktSentenceTokenizer
 from unidecode import unidecode
 
-
-
 # file = open('assets/reflections.json', encoding="utf8")
 #
 # # usar stopword pra tirar o desnecessario (lembrar de tirar o nâo do grupo)
@@ -16,14 +14,20 @@ from unidecode import unidecode
 
 # verbos
 
+# verbs = (
+#     ('ter', 'tenho', 'tive'),
+#     ('achar', 'acho', 'achei'),
+#     ('ser', 'é', 'foi', 'era'),
+#     ('estar', 'estou', 'esteve', 'estava', 'estive'),
+#     ('encontrar', 'encontramos', 'encontro', 'encontrei', 'encontrávamos'),
+#     ('sentir', 'sinto', 'senti'),
+#     ('fazer', 'faço', 'fiz', 'fizemos')
+# )
+
+
 verbs = (
-    ('ter', 'tenho', 'tive'),
-    ('achar', 'acho', 'achei'),
-    ('ser', 'é', 'foi', 'era'),
-    ('estar', 'estou', 'esteve', 'estava', 'estive'),
-    ('encontrar', 'encontramos', 'encontro', 'encontrei', 'encontrávamos'),
-    ('sentir', 'sinto', 'senti'),
-    ('fazer', 'faço', 'fiz', 'fizemos')
+     ('sinto', 'deixado'),
+     ('nada', 'hdiasu')
 )
 
 adverbs = (
@@ -43,6 +47,10 @@ adverbs = (
         'word': 'acho que',
         'multiplier': 0.5
     },
+    {
+        'word': 'certo',
+        'multiplier': 0.5
+    }
 )
 
 # podemos usar stemmer nos adjetivos e no texto original para termos todas as variações
@@ -82,6 +90,10 @@ substantives = (
         'word': 'problema',
         'multiplier': -2
     },
+    {
+        'word': 'frustração',
+        'multiplier': -2
+    }
 
 )
 
@@ -94,7 +106,6 @@ sample_reflection = "Até aqui sinto certa frustração com meu desempenho pois 
 
 
 def analyse_reflection(reflection):
-
     sent_tokenizer = PunktSentenceTokenizer()
     reflection_sentences = sent_tokenizer.tokenize(reflection)
 
@@ -109,26 +120,23 @@ def analyse_reflection(reflection):
 
                 # verbos sao necessariamente uma palavra so, entao nao preciso quebrar em ngrams
                 sent = word_tokenizer(sentence)
-                tokenized_sentence = enumerate(sent)
-
-
-
-                ####PAREI AQUI#####
-
-
+                tokenized_sentence = [x for x in enumerate(sent)]
 
                 # esse é para o caso de existir o mesmo verbo mais de uma vez na mesma frase
-                verb_indexes = [i for i, v in tokenized_sentence if v == verb]
+                verb_indexes = [(i, v) for i, v in tokenized_sentence if v == verb]
 
                 if not verb_indexes:
                     break
 
-                for index, verb in verb_indexes:
+                for verb_index, verb in verb_indexes:
                     # offset para pesquisar por outros elementos ao redor dos verbos
                     offset = 3
 
+                    # changing the enumerable object to list
+                    tokenized_sentence = [x for x in tokenized_sentence]
+
                     # surr stands for surrounding
-                    surr_words = [(index, word) for index, word in tokenized_sentence[index - offset:index + offset]]
+                    surr_words = [(index, word) for index, word in tokenized_sentence[max(0, verb_index - offset):verb_index + offset]]
                     cleaned_surr_words = [(index, clean_word(word)) for index, word in surr_words]
                     # talvez seja o caso de nao fazer substantivos com stemming,
                     # dado que eles podem ser adjetivos. a ideia entao eh
@@ -141,12 +149,12 @@ def analyse_reflection(reflection):
                     checked_words_in_sentence += [index for index, word in surr_substantives]
 
                     adj_words = [clean_word(adj['word']) for adj in adjectives]
-                    surr_adjectives = [(index, word) for (index, word) in surr_words if
+                    surr_adjectives = [(index, word) for (index, word) in cleaned_surr_words if
                                        word in adj_words and index not in checked_words_in_sentence]
                     checked_words_in_sentence += [index for index, word in surr_adjectives]
 
                     adv_words = [clean_word(adv['word']) for adv in adverbs]
-                    surr_adverbs = [(index, word) for (index, word) in surr_words if
+                    surr_adverbs = [(index, word) for (index, word) in cleaned_surr_words if
                                     word in adv_words and index not in checked_words_in_sentence]
                     checked_words_in_sentence += [index for index, word in surr_adverbs]
 
@@ -154,7 +162,7 @@ def analyse_reflection(reflection):
                     print('for the verb ' + verb)
                     print('substantives: ' + ' '.join([word for index, word in surr_substantives]))
                     print('adjetives: ' + ' '.join([word for index, word in surr_adjectives]))
-                    print('adverbs: ' + ' '.join([word for index, word in adjectives]))
+                    print('adverbs: ' + ' '.join([word for index, word in surr_adverbs]) + '\n\n\n')
 
 
 def clean_word(word):
