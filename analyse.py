@@ -24,10 +24,9 @@ class AnalyseReflection:
         self.results = []
 
         self._identify_keywords()
+        self._calculate_score()
 
     # TODO dividir essa funcao em duas, uma que busca e retorna os elementos relevantes proximas, e outra que calcula
-
-
 
     # find the terms within the surrounding string from a certain list, add index to the original object when found
     def _find_terms(self, surr_words, terms_list, clean=True):
@@ -99,3 +98,18 @@ class AnalyseReflection:
 
                     if result_obj['terms']:
                         self.results.append(result_obj)
+
+    # current formulae: substantives*adverbs*adjectives
+    # examples:
+    # 'muito dificil': 2 * -2 = -4
+    # 'bastante complicado':
+    def _calculate_score(self):
+
+        for result in self.results:
+            adverb_values = [float(x['value']) for x in result['terms'] if x['type'] == 'adverb']
+            substantive_values = [float(x['value']) for x in result['terms'] if x['type'] == 'substantive']
+            adjective_values = [float(x['value']) for x in result['terms'] if x['type'] == 'adjective']
+
+            score = util.mult(adverb_values) * util.mult(substantive_values) * util.mult(adjective_values)
+
+            result['score'] = score
