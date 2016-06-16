@@ -1,0 +1,41 @@
+Esse arquivo vai servir de bug tracking: vai ter o que surgiu e o que deveria surgir de cada reflection
+
+
+Ideia: como tem muito resultado que vai dar parecido, talvez seja interessante calcular a media dos resultados das analises de uma reflection e mostrar somente os que estão acima da media
+
+statement: Reflection do keynote kit sobre a big idea.\nTextão que explore os quatro cards de reflection.
+
+-------
+
+reflection na posição 6: Nossa maior dificuldade na definição da BIG IDEA foi termos a clareza do tempo que teríamos para entregar o MVP.
+
+Indica a necessidade de analisar pronomes pessoais também
+
+-------
+
+
+reflection na posição 8: A maior dificuldade na definição da big idea foi definir como nossas limitações afetavam o desenvolvimento dos temas que entraram em votação.
+
+Talvez se o mecanismo de busca de verbo fosse mais inteligente, talvez procurando tambem substantivos primeiro?
+
+-------
+
+reflection posicao 9: Minha maior dificuldade na definição da BIG IDEA foi em dar notas às sugestões, principalmente nas questões de "factível" e "viável", e em afastar a dúvida de quais poderiam virar um app interessante ou não.
+
+checar pronome pessoal de novo
+
+------
+
+reflection 10: A maior dificuldade na definição da big ideia foi não eliminar possibilidades por ja estar pensando em futuras soluções.
+
+buscar substantivo primeiro, ou verbo mais longe
+
+------
+
+reflection 14: Acredito que minha maior dificuldade na big idea foi trazer novas idéias, como acabamos de "sair" do nosso último projeto acabei por ficar muito preso ao universo do mesmo.
+
+pronome pessoal again
+
+------
+
+

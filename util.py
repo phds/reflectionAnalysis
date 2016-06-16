@@ -14,4 +14,4 @@ def mult(elements):
     for el in elements:
         result *= el
 
-    return el
+    return result

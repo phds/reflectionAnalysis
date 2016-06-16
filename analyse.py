@@ -58,8 +58,6 @@ class AnalyseReflection:
 
             for verb in Data.verbs:
 
-                verb = verb['word']
-
                 # verbos sao necessariamente uma palavra so, entao nao preciso quebrar em ngrams
                 sent = word_tokenizer(sentence.lower())
 
@@ -67,16 +65,16 @@ class AnalyseReflection:
                 tokenized_sentence = [x for x in enumerate(sent)]
 
                 # esse é para o caso de existir o mesmo verbo mais de uma vez na mesma frase
-                verb_indexes = [(i, v) for i, v in tokenized_sentence if v == verb]
+                verb_indexes = [(i, v) for i, v in tokenized_sentence if v == verb['word']]
 
                 if not verb_indexes:
                     continue
 
-                for verb_index, verb in verb_indexes:
+                for verb_index, v in verb_indexes:
 
                     result_obj = {
                         'sentence': sentence,
-                        'terms': []
+                        'terms': [verb]
                     }
 
                     # offset para pesquisar por outros elementos ao redor dos verbos
@@ -93,16 +91,20 @@ class AnalyseReflection:
                     for terms in self._find_terms(cleaned_surr_words, Data.adjectives):
                         result_obj['terms'].append(terms)
 
-                    for terms in self._find_terms(cleaned_surr_words, Data.adverbs):
-                        result_obj['terms'].append(terms)
+                    # if we haven't found any of the substantives or adjectives, we shoudn't look for adverbs
 
-                    if result_obj['terms']:
+                    if [x for x in result_obj['terms'] if x['type'] != 'verb']:
+
+                        for terms in self._find_terms(cleaned_surr_words, Data.adverbs):
+                            result_obj['terms'].append(terms)
+
                         self.results.append(result_obj)
 
     # current formulae: substantives*adverbs*adjectives
+    # but if the adverb is alone, don't ignore it
     # examples:
     # 'muito dificil': 2 * -2 = -4
-    # 'bastante complicado':
+    # 'bastante complicado': 2 * -2 = -4
     def _calculate_score(self):
 
         for result in self.results:
