@@ -1,5 +1,6 @@
-from enum import Enum
 import csv
+from enum import Enum
+
 import util
 
 
@@ -11,6 +12,8 @@ class Data:
         self.substantives = self._read_data(POS.substantive)
         self.negatives = self._read_data(POS.negative)
 
+        self.personal_pronouns = self._read_data(POS.personal_pronoun)
+
     def _read_data(self, word_type):
 
         data = []
@@ -19,7 +22,7 @@ class Data:
 
             reader = csv.DictReader(csvfile)
 
-            if word_type.name == 'verb':
+            if word_type.name == 'verb' or word_type.name == 'personal_pronoun':
 
                 for row in reader:
                     obj = {
@@ -49,3 +52,4 @@ class POS(Enum):
     adverb = 3
     substantive = 4
     negative = 5
+    personal_pronoun = 6

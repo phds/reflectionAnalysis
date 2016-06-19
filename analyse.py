@@ -16,6 +16,10 @@ pp = pprint.PrettyPrinter(indent=4)
 
 # TODO quando tiver a lista de palavras que levaram a identificar uma certa frase, mandar os indices das palavras pra poder dar highlight nelas facilmente
 
+# TODO implementar separador de string para '...' e \n
+
+# TODO implementar o não
+
 
 class AnalyseReflection:
     def __init__(self, reflection):
@@ -23,10 +27,9 @@ class AnalyseReflection:
         self.checked_words_in_reflection = []
         self.results = []
 
-        self._identify_keywords()
+        self._identify_keywords(Data.verbs)
+        self._identify_keywords(Data.personal_pronouns)
         self._calculate_score()
-
-    # TODO dividir essa funcao em duas, uma que busca e retorna os elementos relevantes proximas, e outra que calcula
 
     # find the terms within the surrounding string from a certain list, add index to the original object when found
     def _find_terms(self, surr_words, terms_list, clean=True):
@@ -45,7 +48,7 @@ class AnalyseReflection:
 
         return terms
 
-    def _identify_keywords(self):
+    def _identify_keywords(self, key_terms):
         sent_tokenizer = PunktSentenceTokenizer()
         reflection_sentences = sent_tokenizer.tokenize(self.reflection)
 
@@ -54,9 +57,8 @@ class AnalyseReflection:
         for sentence in reflection_sentences:
 
             # keep the words that were checked in a certain sentence so other verbs don't claim ownership
-            checked_words_in_sentence = []
 
-            for verb in Data.verbs:
+            for key_term in key_terms:
 
                 # verbos sao necessariamente uma palavra so, entao nao preciso quebrar em ngrams
                 sent = word_tokenizer(sentence.lower())
@@ -65,16 +67,16 @@ class AnalyseReflection:
                 tokenized_sentence = [x for x in enumerate(sent)]
 
                 # esse é para o caso de existir o mesmo verbo mais de uma vez na mesma frase
-                verb_indexes = [(i, v) for i, v in tokenized_sentence if v == verb['word']]
+                key_term_indexes = [(i, v) for i, v in tokenized_sentence if v == key_term['word']]
 
-                if not verb_indexes:
+                if not key_term_indexes:
                     continue
 
-                for verb_index, v in verb_indexes:
+                for key_term_index, t in key_term_indexes:
 
                     result_obj = {
                         'sentence': sentence,
-                        'terms': [verb]
+                        'terms': [key_term]
                     }
 
                     # offset para pesquisar por outros elementos ao redor dos verbos
@@ -82,7 +84,7 @@ class AnalyseReflection:
 
                     # surr stands for surrounding
                     surr_words = [(index, word) for index, word in
-                                  tokenized_sentence[max(0, verb_index - offset):verb_index + offset]]
+                                  tokenized_sentence[max(0, key_term_index - offset):key_term_index + offset]]
                     cleaned_surr_words = [(index, util.clean_word(word)) for index, word in surr_words]
 
                     for terms in self._find_terms(surr_words, Data.substantives, clean=False):
@@ -93,9 +95,10 @@ class AnalyseReflection:
 
                     # if we haven't found any of the substantives or adjectives, we shoudn't look for adverbs
 
-                    if [x for x in result_obj['terms'] if x['type'] != 'verb']:
-
-                        for terms in self._find_terms(cleaned_surr_words, Data.adverbs):
+                    if [x for x in result_obj['terms'] if x['type'] != 'verb' and x['type'] != 'personal_pronoun']:
+                        adverbs = Data.adverbs
+                        result = self._find_terms(cleaned_surr_words, Data.adverbs)
+                        for terms in result:
                             result_obj['terms'].append(terms)
 
                         self.results.append(result_obj)

@@ -9,7 +9,7 @@ def clean_word(word):
 
 
 def mult(elements):
-    result = 1;
+    result = 1
 
     for el in elements:
         result *= el
