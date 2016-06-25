@@ -21,14 +21,15 @@ pp = pprint.PrettyPrinter(indent=4)
 # TODO implementar o não
 
 
-class AnalyseReflection:
+class ReflectionAnalyser:
     def __init__(self, reflection):
         self.reflection = reflection
         self.checked_words_in_reflection = []
         self.results = []
 
-        self._identify_keywords(Data.verbs)
-        self._identify_keywords(Data.personal_pronouns)
+        # self._identify_keywords(Data.verbs)
+        # self._identify_keywords(Data.personal_pronouns)
+        self._identify_keywords()
         self._calculate_score()
 
     # find the terms within the surrounding string from a certain list, add index to the original object when found
@@ -48,7 +49,7 @@ class AnalyseReflection:
 
         return terms
 
-    def _identify_keywords(self, key_terms):
+    def _identify_keywords(self, key_terms=None):
         sent_tokenizer = PunktSentenceTokenizer()
         reflection_sentences = sent_tokenizer.tokenize(self.reflection)
 
@@ -56,52 +57,58 @@ class AnalyseReflection:
 
         for sentence in reflection_sentences:
 
-            # keep the words that were checked in a certain sentence so other verbs don't claim ownership
+            sent = word_tokenizer(sentence.lower())
 
-            for key_term in key_terms:
+            if key_terms == None:
 
-                # verbos sao necessariamente uma palavra so, entao nao preciso quebrar em ngrams
-                sent = word_tokenizer(sentence.lower())
+                for word in sentence:
 
-                # make an enumerable list, so I have the index of the splitted words changing the enumerable object to list
-                tokenized_sentence = [x for x in enumerate(sent)]
+                    if word in
 
-                # esse é para o caso de existir o mesmo verbo mais de uma vez na mesma frase
-                key_term_indexes = [(i, v) for i, v in tokenized_sentence if v == key_term['word']]
+            else:
+                for key_term in key_terms:
 
-                if not key_term_indexes:
-                    continue
+                    # make an enumerable list, so I have the index of the splitted words changing the enumerable object to list
+                    tokenized_sentence = [x for x in enumerate(sent)]
 
-                for key_term_index, t in key_term_indexes:
+                    # esse é para o caso de existir o mesmo verbo mais de uma vez na mesma frase
+                    key_term_indexes = [(i, v) for i, v in tokenized_sentence if v == key_term['word']]
 
-                    result_obj = {
-                        'sentence': sentence,
-                        'terms': [key_term]
-                    }
+                    if not key_term_indexes:
+                        continue
 
-                    # offset para pesquisar por outros elementos ao redor dos verbos
-                    offset = 3
+                    for key_term_index, t in key_term_indexes:
 
-                    # surr stands for surrounding
-                    surr_words = [(index, word) for index, word in
-                                  tokenized_sentence[max(0, key_term_index - offset):key_term_index + offset]]
-                    cleaned_surr_words = [(index, util.clean_word(word)) for index, word in surr_words]
+                        result_obj = {
+                            'sentence': sentence,
+                            'terms': [key_term]
+                        }
 
-                    for terms in self._find_terms(surr_words, Data.substantives, clean=False):
-                        result_obj['terms'].append(terms)
+                        # offset para pesquisar por outros elementos ao redor dos verbos
+                        offset = 3
 
-                    for terms in self._find_terms(cleaned_surr_words, Data.adjectives):
-                        result_obj['terms'].append(terms)
+                        # surr stands for surrounding
+                        surr_words = [(index, word) for index, word in
+                                      tokenized_sentence[max(0, key_term_index - offset):key_term_index + offset]]
+                        cleaned_surr_words = [(index, util.clean_word(word)) for index, word in surr_words]
 
-                    # if we haven't found any of the substantives or adjectives, we shoudn't look for adverbs
-
-                    if [x for x in result_obj['terms'] if x['type'] != 'verb' and x['type'] != 'personal_pronoun']:
-                        adverbs = Data.adverbs
-                        result = self._find_terms(cleaned_surr_words, Data.adverbs)
-                        for terms in result:
+                        for terms in self._find_terms(surr_words, Data.substantives, clean=False):
                             result_obj['terms'].append(terms)
 
-                        self.results.append(result_obj)
+                        for terms in self._find_terms(cleaned_surr_words, Data.adjectives):
+                            result_obj['terms'].append(terms)
+
+                        # if we haven't found any of the substantives or adjectives, we shoudn't look for adverbs
+
+                        if [x for x in result_obj['terms'] if x['type'] != 'verb' and x['type'] != 'personal_pronoun']:
+                            adverbs = Data.adverbs
+                            result = self._find_terms(cleaned_surr_words, Data.adverbs)
+                            for terms in result:
+                                result_obj['terms'].append(terms)
+
+                            self.results.append(result_obj)
+
+
 
     # current formulae: substantives*adverbs*adjectives
     # but if the adverb is alone, don't ignore it

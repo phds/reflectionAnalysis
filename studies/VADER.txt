@@ -1,0 +1,29 @@
+split the sentences into words and emoticons
+  wordsAndEmoticons uses split() with no argument, splitting just for whitespace
+
+remove the words with less than one character in length
+
+punctuation treatment:
+  attach a punct from a puncList on every word
+  check if that combination is part of the original wordsAndEmoticons features
+
+check for uppercase on the sentence
+
+if there is 'kind of', append 0 on the sentiments array
+
+check if the word is in the word dict
+  if so, get the value
+    if the word is on caps, add the caps_increase
+
+    if there is an adverb, sum it with the adverb value
+
+    check for negation, and if so multiply it by its negative value
+
+    check for expressions and sum the values for them on the final value
+
+
+
+
+check for 'but', if found, multiply whatever is before it by 0.5, and whatever is after by 1.5
+
+amplifica o valor da frase pela quantidade de interrogacoes e exclamacoes
