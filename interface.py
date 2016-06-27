@@ -6,17 +6,22 @@ from reflection_analyser import ReflectionAnalyser
 sample_reflection = 'Até aqui sinto certa frustração com meu desempenho pois sinto que estou me desgastando nas aulas. Imagino que a pressa em fazer os exercícios ou a quantidade deles tenha me deixado saturada, mas talvez me reacostumar a acordar cedo esteja sendo um fator determinante também'
 
 # try:
-data = json.load(open('./assets/reflections.json'))
+data = json.load(open('./assets/reflections.json', encoding="utf-8"))
 
-reflection = data[0]['reflections'][25]['text']
+reflectionList = data[0]['reflections']
 
-print(reflection + '\n')
+for reflection in reflectionList:
 
-ar = ReflectionAnalyser(reflection)
+    try:
+        reflection_text = reflection['text']
+        print(reflectionList.index(reflection))
+        print(reflection_text + '\n')
 
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(ar.results)
-#
-# except KeyError as err:
-#     print('text field not present on reflection: {0}'.format(err))
-#     print(sys.exc_info()[0])
+        ar = ReflectionAnalyser(reflection_text)
+
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(ar.results)
+        print('\n\n')
+    except Exception as e:
+        print (e)
+        continue
