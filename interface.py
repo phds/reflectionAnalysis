@@ -8,14 +8,17 @@ sample_reflection = 'Até aqui sinto certa frustração com meu desempenho pois 
 # try:
 data = json.load(open('./assets/reflections.json'))
 
-reflection = data[0]['reflections'][25]['text']
+reflection_text = data[0]['reflections']
 
-print(reflection + '\n')
+for reflection in reflectionList:
 
-ar = ReflectionAnalyser(reflection)
+    reflection_text = reflection['text']
+    print(reflection + '\n')
 
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(ar.results)
+    ar = ReflectionAnalyser(reflection)
+
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(ar.results)
 #
 # except KeyError as err:
 #     print('text field not present on reflection: {0}'.format(err))

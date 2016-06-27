@@ -27,9 +27,9 @@ class ReflectionAnalyser:
         self.checked_words_in_reflection = []
         self.results = []
 
-        # self._identify_keywords(Data.verbs)
+        self._identify_keywords(Data.verbs + Data.personal_pronouns)
         # self._identify_keywords(Data.personal_pronouns)
-        self._identify_keywords()
+        # self._identify_keywords()
         self._calculate_score()
 
     # find the terms within the surrounding string from a certain list, add index to the original object when found
@@ -63,7 +63,7 @@ class ReflectionAnalyser:
 
                 for word in sentence:
 
-                    if word in
+                    pass
 
             else:
                 for key_term in key_terms:
