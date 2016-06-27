@@ -85,7 +85,7 @@ class ReflectionAnalyser:
                         }
 
                         # offset para pesquisar por outros elementos ao redor dos verbos
-                        offset = 3
+                        offset = 5
 
                         # surr stands for surrounding
                         surr_words = [(index, word) for index, word in
