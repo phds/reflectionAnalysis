@@ -5,18 +5,6 @@ Ideia: como tem muito resultado que vai dar parecido, talvez seja interessante c
 
 statement: Reflection do keynote kit sobre a big idea.\nTextão que explore os quatro cards de reflection.
 
--------
-
-reflection na posição 8: A maior dificuldade na definição da big idea foi definir como nossas limitações afetavam o desenvolvimento dos temas que entraram em votação.
-
-Talvez se o mecanismo de busca de verbo fosse mais inteligente, talvez procurando tambem substantivos primeiro?
-
--------
-
-reflection 10: A maior dificuldade na definição da big ideia foi não eliminar possibilidades por ja estar pensando em futuras soluções.
-
-buscar substantivo primeiro, ou verbo mais longe
-
 ------
 
 reflection 16: o \n nao ta funcionando como um separador
@@ -24,3 +12,6 @@ reflection 16: o \n nao ta funcionando como um separador
 ------
 
 reflection 17: implementar os não
+
+
+entao nao necessariamente eu preciso dar sintomas de aprendizagem ou motivação para todas as reflections

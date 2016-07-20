@@ -8,7 +8,17 @@ sample_reflection = 'Até aqui sinto certa frustração com meu desempenho pois 
 # try:
 data = json.load(open('./assets/reflections.json', encoding="utf-8"))
 
-reflectionList = data[0]['reflections']
+reflection_object = data[5]
+reflectionList = reflection_object['reflections']
+
+# reflection_text = reflectionList[30]['text']
+# print(reflection_text + '\n')
+#
+# ar = ReflectionAnalyser(reflection_text)
+#
+# pp = pprint.PrettyPrinter(indent=4)
+# pp.pprint(ar.results)
+# print('\n\n')
 
 for reflection in reflectionList:
 
@@ -25,3 +35,8 @@ for reflection in reflectionList:
     except Exception as e:
         print (e)
         continue
+
+test_sentences = [
+    "Foi dificil encontrar a solução.",
+
+]

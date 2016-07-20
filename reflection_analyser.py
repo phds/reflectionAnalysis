@@ -10,6 +10,7 @@ from data import Data
 Data = Data()
 pp = pprint.PrettyPrinter(indent=4)
 
+
 # TODO analisar se os verbos que usam outros verbos depois são frequentes e relevantes (ex 'precisar fazer')
 
 # TODO considerar o caso de expressões nos adjetivos (Ex 'um tanto quanto'), e para adverbios tambem (Ex 'acho que')
@@ -27,10 +28,10 @@ class ReflectionAnalyser:
         self.checked_words_in_reflection = []
         self.results = []
 
-        self._identify_keywords(Data.verbs + Data.personal_pronouns)
+        # self._identify_keywords(Data.verbs + Data.personal_pronouns)
         # self._identify_keywords(Data.personal_pronouns)
-        # self._identify_keywords()
-        self._calculate_score()
+        self._identify_keywords()
+        # self._calculate_score()
 
     # find the terms within the surrounding string from a certain list, add index to the original object when found
     def _find_terms(self, surr_words, terms_list, clean=True):
@@ -59,17 +60,26 @@ class ReflectionAnalyser:
 
             sent = word_tokenizer(sentence.lower())
 
-            if key_terms == None:
+            if key_terms is None:
 
-                for word in sentence:
+                tokenized_sentence = [(x[0], util.clean_word(x[1])) for x in enumerate(sent)]
 
-                    pass
+                relevant_data = Data.adjectives + Data.substantives
+
+                result_obj = {
+                    'sentence': sentence,
+                    'terms': []
+                }
+
+                terms_found = self._find_terms(tokenized_sentence, relevant_data)
+                if terms_found:
+                    result_obj['terms'].append(terms_found)
+                    self.results.append(result_obj)
 
             else:
                 for key_term in key_terms:
 
                     # make an enumerable list, so I have the index of the splitted words changing the enumerable object to list
-                    tokenized_sentence = [x for x in enumerate(sent)]
 
                     # esse é para o caso de existir o mesmo verbo mais de uma vez na mesma frase
                     key_term_indexes = [(i, v) for i, v in tokenized_sentence if v == key_term['word']]
@@ -107,8 +117,6 @@ class ReflectionAnalyser:
                                 result_obj['terms'].append(terms)
 
                             self.results.append(result_obj)
-
-
 
     # current formulae: substantives*adverbs*adjectives
     # but if the adverb is alone, don't ignore it
