@@ -8,7 +8,7 @@ sample_reflection = 'Até aqui sinto certa frustração com meu desempenho pois 
 # try:
 data = json.load(open('./assets/reflections.json', encoding="utf-8"))
 
-reflection_object = data[5]
+reflection_object = data[2]
 reflectionList = reflection_object['reflections']
 
 # reflection_text = reflectionList[30]['text']
@@ -38,5 +38,6 @@ for reflection in reflectionList:
 
 test_sentences = [
     "Foi dificil encontrar a solução.",
+    "não tivemos problemas em fazer"
 
 ]

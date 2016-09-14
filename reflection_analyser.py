@@ -11,15 +11,14 @@ Data = Data()
 pp = pprint.PrettyPrinter(indent=4)
 
 
-# TODO analisar se os verbos que usam outros verbos depois são frequentes e relevantes (ex 'precisar fazer')
-
-# TODO considerar o caso de expressões nos adjetivos (Ex 'um tanto quanto'), e para adverbios tambem (Ex 'acho que')
-
-# TODO quando tiver a lista de palavras que levaram a identificar uma certa frase, mandar os indices das palavras pra poder dar highlight nelas facilmente
+# TODO analisar se os verbos que usam outros verbos depois são frequentes e relevantes (ex 'precisar fazer') isso sendo a estrategia de buscar pelo verbo
 
 # TODO implementar separador de string para '...' e \n
 
 # TODO implementar o não
+
+# TODO implementar o suporte a expressoes de mais de uma palavra
+
 
 
 class ReflectionAnalyser:
